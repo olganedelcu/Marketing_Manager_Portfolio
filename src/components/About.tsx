@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TimelineItem = {
   id: string;
@@ -59,43 +59,49 @@ const TIMELINE: TimelineItem[] = [
 export function About() {
   const [visible, setVisible] = useState<Set<number>>(() => new Set());
   const nodes = useRef<(HTMLDivElement | null)[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const observer = useMemo(
-    () =>
-      new IntersectionObserver(
-        (entries) => {
-          setVisible((prev) => {
-            let next: Set<number> | null = null;
+  useEffect(() => {
+    // extra safety guard for weird build envs
+    if (typeof window === "undefined") return;
 
-            for (const entry of entries) {
-              if (!entry.isIntersecting) continue;
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        setVisible((prev) => {
+          let next: Set<number> | null = null;
 
-              const idx = nodes.current.indexOf(entry.target as HTMLDivElement);
-              if (idx < 0 || prev.has(idx)) continue;
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
 
-              next ??= new Set(prev);
-              next.add(idx);
-            }
+            const idx = nodes.current.indexOf(entry.target as HTMLDivElement);
+            if (idx < 0 || prev.has(idx)) continue;
 
-            return next ?? prev;
-          });
-        },
-        { threshold: 0.3 }
-      ),
-    []
-  );
+            next ??= new Set(prev);
+            next.add(idx);
+          }
 
-  useEffect(() => () => observer.disconnect(), [observer]);
+          return next ?? prev;
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    // observe whatever is mounted right now
+    for (const el of nodes.current) {
+      if (el) observerRef.current.observe(el);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, []);
 
   const setNode = (index: number) => (el: HTMLDivElement | null) => {
     nodes.current[index] = el;
-    if (el) observer.observe(el);
+    if (el && observerRef.current) observerRef.current.observe(el);
   };
 
   return (
     <div className="container mx-auto px-8 py-12">
       <div className="max-w-4xl">
-
         <section className="pb-20">
           <div className="max-w-4xl">
             <h2 className="mb-6 text-4xl font-bold text-center">Career Journey</h2>
@@ -149,20 +155,15 @@ export function About() {
 
                             <div>
                               <h3 className="text-xl font-bold">{item.role}</h3>
-                              <p className="text-sm font-semibold text-blue-600">
-                                {item.company}
-                              </p>
+                              <p className="text-sm font-semibold text-blue-600">{item.company}</p>
                             </div>
                           </div>
 
-                          <p className="mb-3 text-sm font-medium text-gray-600">
-                            {item.period}
-                          </p>
+                          <p className="mb-3 text-sm font-medium text-gray-600">{item.period}</p>
                           <p className="text-gray-700">{item.description}</p>
                         </div>
                       </div>
 
-                      {/* Image on the opposite side */}
                       <div
                         className={[
                           "mt-4 flex-1 md:mt-0 flex justify-center",
