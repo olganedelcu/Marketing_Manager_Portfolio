@@ -78,8 +78,8 @@ export function Testimonials() {
                     </p>
                   </div>
 
-                  <p className="text-gray-700 leading-relaxed">
-                    "{testimonial.text}"
+                  <p className="text-gray-700 leading-relaxed italic font-light">
+                    {testimonial.text}
                   </p>
                 </div>
               </div>
