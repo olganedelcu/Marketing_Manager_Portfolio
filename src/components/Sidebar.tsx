@@ -14,10 +14,10 @@ function NavLink({ item }: { item: NavItem }) {
     <Link
       href={item.href}
       className={cn(
-        "block px-4 py-2 rounded-md text-sm font-medium transition-colors",
+        "block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
         isActive
-          ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          ? "bg-gray-100 text-gray-900 shadow-sm"
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
       )}
       target={item.external ? "_blank" : undefined}
       rel={item.external ? "noopener noreferrer" : undefined}
@@ -29,13 +29,19 @@ function NavLink({ item }: { item: NavItem }) {
 
 export function Sidebar() {
   return (
-    <aside className="w-64 border-r bg-card min-h-screen p-6">
-      <div className="mb-8">
-        <h1 className="text-xl font-bold mb-1">Marketing Portfolio</h1>
-        <p className="text-sm text-muted-foreground">Miruna Nedelcu</p>
+    <aside className="w-64 min-h-screen p-6 bg-white border-r border-gray-200" style={{
+      backdropFilter: 'blur(20px)',
+      backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    }}>
+      <div className="mb-10">
+        <h1 className="text-2xl font-semibold mb-1 text-gray-900" style={{
+          letterSpacing: '-0.02em',
+          fontWeight: 600
+        }}>My Portfolio</h1>
+        <p className="text-sm text-gray-500 font-medium">Miruna Nedelcu</p>
       </div>
 
-      <nav className="space-y-6">
+      <nav className="space-y-8">
         {/* main navigation */}
         <div className="space-y-1">
           {MAIN_NAV.map((item) => (
@@ -45,8 +51,8 @@ export function Sidebar() {
 
         {/* resources section */}
         {RESOURCES_NAV.title && (
-          <div className="pt-4 border-t">
-            <h2 className="px-4 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <div className="pt-6 border-t border-gray-200">
+            <h2 className="px-4 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">
               {RESOURCES_NAV.title}
             </h2>
             <div className="space-y-1">

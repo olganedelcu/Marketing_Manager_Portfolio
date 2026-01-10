@@ -7,6 +7,10 @@ export const ProjectSchema = z.object({
   tags: z.array(z.string()).default([]),
   href: z.string().url().optional(),
   featured: z.boolean().default(false),
+  logos: z.array(z.object({
+    src: z.string(),
+    alt: z.string(),
+  })).optional(),
 });
 
 export type Project = z.infer<typeof ProjectSchema>;

@@ -1,5 +1,6 @@
 import { projects } from "@/content/projects";
 import { ProjectCard } from "@/components/ProjectCard";
+import { TechStack } from "@/components/TechStack";
 
 export default function ProjectsPage() {
   const featuredProjects = projects.filter((p) => p.featured);
@@ -8,12 +9,9 @@ export default function ProjectsPage() {
   return (
     <div className="container mx-auto px-8 py-12">
       <div className="max-w-6xl">
-        <h1 className="text-4xl font-bold mb-3">Projects</h1>
-        <p className="text-lg text-muted-foreground mb-12">
-          A collection of marketing campaigns, content projects, and professional work.
-        </p>
+        <TechStack />
 
-        {featuredProjects.length > 0 && (
+        {!!featuredProjects.length && (
           <section className="mb-16">
             <h2 className="text-2xl font-semibold mb-6">Featured</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -24,7 +22,7 @@ export default function ProjectsPage() {
           </section>
         )}
 
-        {otherProjects.length > 0 && (
+        {!!otherProjects.length && (
           <section>
             <h2 className="text-2xl font-semibold mb-6">All Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -35,7 +33,7 @@ export default function ProjectsPage() {
           </section>
         )}
 
-        {projects.length === 0 && (
+        {!projects.length && (
           <p className="text-muted-foreground">No projects yet. Check back soon!</p>
         )}
       </div>
