@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 type Logo = {
   src: string;
@@ -63,29 +64,72 @@ const GROUPS: Group[] = [
   },
 ];
 
+function TechStackCard({ group, index }: { group: Group; index: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className={`group rounded-2xl bg-white p-8 shadow-sm transition-all duration-700 hover:shadow-xl hover:scale-[1.02] ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "translate-y-12 opacity-0"
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <h3 className="mb-6 text-xl font-semibold text-gray-800">{group.title}</h3>
+
+      <div className="flex flex-wrap gap-4 items-center justify-center min-h-[100px]">
+        {group.logos.map((logo, logoIndex) => (
+          <div
+            key={logo.src}
+            className="transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+            style={{ transitionDelay: `${logoIndex * 50}ms` }}
+          >
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={80}
+              height={32}
+              className="object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TechStack() {
   return (
     <section className="mb-16">
-      <h2 className="mb-8 text-3xl font-bold text-center">Tools & Skills</h2>
+      <h2 className="mb-10 text-3xl font-bold text-center">Tools & Skills</h2>
 
-      {GROUPS.map((group) => (
-        <div key={group.title} className="mb-10">
-          <h3 className="mb-4 text-lg font-semibold text-gray-700">{group.title}</h3>
-
-          <div className="flex flex-wrap gap-6 items-center">
-            {group.logos.map((logo) => (
-              <Image
-                key={logo.src}
-                src={logo.src}
-                alt={logo.alt}
-                width={100}
-                height={40}
-                className="object-contain"
-              />
-            ))}
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {GROUPS.map((group, index) => (
+          <TechStackCard key={group.title} group={group} index={index} />
+        ))}
+      </div>
     </section>
   );
 }
