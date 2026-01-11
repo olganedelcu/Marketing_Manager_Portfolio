@@ -90,16 +90,16 @@ function TechStackCard({ group, index }: { group: Group; index: number }) {
   return (
     <div
       ref={cardRef}
-      className={`group rounded-2xl bg-white p-8 shadow-sm transition-all duration-700 hover:shadow-xl hover:scale-[1.02] ${
+      className={`group rounded-xl bg-white p-4 md:p-6 shadow-sm transition-all duration-700 hover:shadow-lg hover:scale-[1.01] ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "translate-y-12 opacity-0"
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <h3 className="mb-6 text-xl font-semibold text-gray-800">{group.title}</h3>
+      <h3 className="mb-4 text-base md:text-lg font-semibold text-gray-800">{group.title}</h3>
 
-      <div className="flex flex-wrap gap-4 items-center justify-center min-h-[100px]">
+      <div className="flex flex-wrap gap-3 md:gap-4 items-center justify-center min-h-20">
         {group.logos.map((logo, logoIndex) => (
           <div
             key={logo.src}
@@ -109,8 +109,8 @@ function TechStackCard({ group, index }: { group: Group; index: number }) {
             <Image
               src={logo.src}
               alt={logo.alt}
-              width={80}
-              height={32}
+              width={50}
+              height={20}
               className="object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
             />
           </div>
@@ -123,9 +123,9 @@ function TechStackCard({ group, index }: { group: Group; index: number }) {
 export function TechStack() {
   return (
     <section className="mb-16">
-      <h2 className="mb-10 text-3xl font-bold text-center">Tools & Skills</h2>
+      <h2 className="mb-8 text-2xl md:text-3xl font-bold text-center">Tools & Skills</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {GROUPS.map((group, index) => (
           <TechStackCard key={group.title} group={group} index={index} />
         ))}
