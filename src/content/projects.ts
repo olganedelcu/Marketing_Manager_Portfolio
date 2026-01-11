@@ -16,7 +16,7 @@ const raw = [
     featured: false,
     logos: [
       {
-        src: "/logos/santander-x.png",
+        src: "/assets/logos/santander.jpg",
         alt: "Santander X logo"
       }
     ]
